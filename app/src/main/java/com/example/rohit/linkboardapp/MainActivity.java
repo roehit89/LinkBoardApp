@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.rohit.linkboardapp.Model.Model;
 import com.example.rohit.linkboardapp.Model.UserLoginModel;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button createUserButton;
     Button loginUserButton;
     EditText createUserText;
+    TextView resultText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         loginUserButton = (Button) findViewById(R.id.login_button);
         createUserButton = (Button) findViewById(R.id.create_user);
         createUserText = (EditText) findViewById(R.id.create_user_textView);
+        resultText = (TextView) findViewById(R.id.result_textview_id);
 
 
 
@@ -65,6 +68,18 @@ public class MainActivity extends AppCompatActivity {
                                                                 Log.i(Tag + " user result fname", String.valueOf(userModelObject.data.getUsername()));
                                                                 Log.i(Tag + " user result name", String.valueOf(userModelObject.data.getCreated_at()));
                                                                 Log.i(Tag + " user result created", String.valueOf(userModelObject.data.getId()));
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        resultText.setText("username : " + String.valueOf(userModelObject.data.getUsername()));
+                                                                        resultText.append("\nid : " + String.valueOf(userModelObject.data.getId()));
+                                                                        resultText.append("\nemail : " + String.valueOf(userModelObject.data.getEmail()));
+                                                                        resultText.append("\ncreated at : " + String.valueOf(userModelObject.data.getCreated_at()));
+                                                                        resultText.append("\nupdated at : " + String.valueOf(userModelObject.data.getUpdated_at()));
+
+
+                                                                    }
+                                                                });
                                                             } else {
                                                                 Log.i("user already in use", "user already in use");
                                                             }
@@ -85,6 +100,20 @@ public class MainActivity extends AppCompatActivity {
                         loginUserMap.put("password", "$2y$10$nxrghfKzU5uyJMoNcz22Y.TRNWllLHtEXnZhMSOiRLaSEaquZMLeq");
 
                         userLoginModelObject = fetchApiData.loginUser(loginUserMap);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                resultText.setText("email : " + userLoginModelObject.getData().getEmail());
+                                resultText.append("\ncreated at : " + userLoginModelObject.getData().getCreated_at());
+                                resultText.append("\nfirst name : "+userLoginModelObject.getData().getFirst_name());
+                                resultText.append("\nrole id : "+userLoginModelObject.getData().getRole_id());
+                                resultText.append("\norganization id : "+userLoginModelObject.getData().getOrganization_id());
+                                resultText.append("\norganization name : "+userLoginModelObject.getData().getOrganization_name());
+                                resultText.append("\norganization url : "+userLoginModelObject.getData().getOrganization_url());
+
+                            }
+                        });
 
                         Log.i(Tag + "user email", userLoginModelObject.getData().getEmail());
                         Log.i(Tag + "user id", userLoginModelObject.getData().getId());
